@@ -51,6 +51,10 @@ module Hatchet
     #
     attr_reader :ndc
 
+    # Public: The line which called log
+    #
+    attr_reader :source_line
+
     # Public: Creates a new message.
     #
     # args  - The Hash used to provide context for the message (default: {}):
@@ -86,6 +90,7 @@ module Hatchet
     #
     def initialize(args = {}, error = nil, &block)
       @message = nil
+      @source_line = nil
 
       if args.kind_of? Hash
         # If args is a Hash then using new constructor format or no parameters
@@ -93,6 +98,7 @@ module Hatchet
         @ndc     = args[:ndc] || []
         @error   = args[:error]
         @message = args[:message] unless block
+        @source_line = args[:source_line]
       else
         # Otherwise assume the old format and coerce args accordingly.
         @ndc     = []

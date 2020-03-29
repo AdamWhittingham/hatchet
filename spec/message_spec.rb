@@ -63,6 +63,14 @@ describe Message do
     end
   end
 
+  describe '#source_line' do
+    let(:subject) { Message.new(message: 'hello world', source_line: "foo:123") }
+
+    it 'returns the source line' do
+      assert_equal "foo:123", subject.source_line
+    end
+  end
+
   describe 'supporting the old constructor format' do
     describe 'providing an evaluted message' do
       let(:subject) { Message.new('Evaluated') }

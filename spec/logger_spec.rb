@@ -222,5 +222,13 @@ describe HatchetLogger do
     end
 
   end
+
+  describe '#source_line' do
+    it 'records the source line which invoked the logger' do
+      subject.info("Hello"); caller_line = "#{__FILE__}:#{__LINE__}"
+
+      assert last_message.source_line.include?(caller_line)
+    end
+  end
 end
 

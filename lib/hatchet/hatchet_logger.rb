@@ -52,6 +52,9 @@ module Hatchet
   #
   class HatchetLogger
 
+    # Internal: used to filter backtraces
+    HATCHET = /hatchet/.freeze
+
     # Internal: Map from standard library levels to Symbols.
     #
     STANDARD_TO_SYMBOL = {
@@ -387,8 +390,10 @@ module Hatchet
       # unmarshalling the logger.
       @configuration ||= Hatchet.configuration
       @ndc ||= Hatchet::NestedDiagnosticContext.current
+      pp caller_locations
+      source_line = caller_locations.detect{ |loc| !loc.to_s.match? HATCHET }.to_s
 
-      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, backtrace_filters: @configuration.backtrace_filters, &block)
+      msg = Message.new(ndc: @ndc.context.clone, message: message, error: error, source_line: source_line, backtrace_filters: @configuration.backtrace_filters, &block)
 
       @configuration.appenders.each do |appender|
         if appender.enabled?(level, @context)
